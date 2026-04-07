@@ -6,19 +6,19 @@ import numpy as np
 drones = [5, 10, 20]
 
 # Débit moyen (Mbps)
-debit = [8.15, 6.10, 2.45]
+debit = [8.15, 6.10, 1.45]
 
 # Latence Wi-Fi L_tx (ms)
-ltx = [11.1, 28.0, 196.0]
+ltx = [11.1, 28.0, 262.07]
 
 # Latence totale L_total (ms)
-ltotal = [118.0, 135.0, 303.0]
+ltotal = [118.0, 135.0, 369.07]
 
 # Jitter (ms)
-jitter = [1.45, 2.34, 5.56]
+jitter = [1.45, 2.34, 4.57]
 
 # Perte paquets (%)
-pertes = [0.03, 0.16, 38.5]
+pertes = [0.03, 0.16, 76.46]
 
 # ========== COURBE 1 : Débit moyen ==========
 plt.figure(figsize=(8, 5))
