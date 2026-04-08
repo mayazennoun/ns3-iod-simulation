@@ -98,7 +98,7 @@ Le scenario a 20 drones revele la limite de scalabilite de l'architecture a noeu
 ## Structure du depot
 
 ```
-blockchain-iod-video-security/
+ns3-iod-simulation/
 │
 ├── README.md
 ├── LICENSE
@@ -127,9 +127,7 @@ blockchain-iod-video-security/
 │   ├── architecture.md
 │   ├── simulation-setup.md
 │   └── results-analysis.md
-│
-└── paper/
-    └── figures/
+└── 
 ```
 
 ---
