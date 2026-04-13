@@ -96,7 +96,7 @@ Le scenario N=20 avec architecture multi-Edge (2 noeuds Edge independants couvra
 ## Structure du depot
 
 ```
-ns3-iod-simulation/
+ns3-secure-iod-edge-blockchain/
 │
 ├── README.md
 ├── LICENSE
@@ -125,12 +125,18 @@ ns3-iod-simulation/
 │   ├── architecture.md
 │   ├── simulation-setup.md
 │   └── results-analysis.md
-└── 
+│  
+└── attack-scenarios/
+│   ├── iod-attack-dos.cc
+│   └── iod-attack-eavesdrop.cc
+│   ├── iod-attack-replay.cc
+│   └── iod-attack-spoofing.cc
+|   └── README.md   
+|
    
 ```
 
 ---
-
 ## Comment lancer les simulations
 
 ```bash
