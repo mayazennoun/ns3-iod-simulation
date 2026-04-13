@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     cmd.AddValue("dosRate",  "Taux attaque DoS",  dosRate);
     cmd.Parse(argc, argv);
 
-    // Canal Wi-Fi partage
+    // Canal Wi-Fi partage — tous sur le meme canal
     YansWifiChannelHelper channelHelper;
     channelHelper.SetPropagationDelay("ns3::ConstantSpeedPropagationDelayModel");
     channelHelper.AddPropagationLoss("ns3::LogDistancePropagationLossModel",
@@ -51,29 +51,15 @@ int main(int argc, char *argv[])
         "m2", DoubleValue(1.0));
     Ptr<YansWifiChannel> wifiChannel = channelHelper.Create();
 
-    // PHY legitimes
     YansWifiPhyHelper phy;
     phy.SetChannel(wifiChannel);
-    phy.Set("TxPowerStart", DoubleValue(20.0));
-    phy.Set("TxPowerEnd",   DoubleValue(20.0));
+    phy.Set("TxPowerStart", DoubleValue(23.0));
+    phy.Set("TxPowerEnd",   DoubleValue(23.0));
     phy.Set("ChannelSettings", StringValue("{0, 40, BAND_5GHZ, 0}"));
 
     WifiHelper wifi;
     wifi.SetStandard(WIFI_STANDARD_80211ac);
     wifi.SetRemoteStationManager("ns3::MinstrelHtWifiManager");
-
-    // PHY attaquant sur le meme canal
-    YansWifiPhyHelper phyAttacker;
-    phyAttacker.SetChannel(wifiChannel);
-    phyAttacker.Set("TxPowerStart", DoubleValue(23.0));
-    phyAttacker.Set("TxPowerEnd",   DoubleValue(23.0));
-    phyAttacker.Set("ChannelSettings", StringValue("{0, 40, BAND_5GHZ, 0}"));
-
-    WifiHelper wifiAttacker;
-    wifiAttacker.SetStandard(WIFI_STANDARD_80211ac);
-    wifiAttacker.SetRemoteStationManager("ns3::ConstantRateWifiManager",
-        "DataMode",    StringValue("HtMcs7"),
-        "ControlMode", StringValue("HtMcs0"));
 
     // Noeuds
     NodeContainer drones;
@@ -85,18 +71,27 @@ int main(int argc, char *argv[])
     NodeContainer attacker;
     attacker.Create(1);
 
-    // MAC legitimes
-    WifiMacHelper mac;
+    // Tous les noeuds sur le meme SSID
     Ssid ssid = Ssid("IoD-Network");
-    mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid));
-    NetDeviceContainer droneDevs = wifi.Install(phy, mac, drones);
-    mac.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
-    NetDeviceContainer edgeDev = wifi.Install(phy, mac, edge);
 
-    // MAC attaquant adhoc
+    // MAC drones legitimes
+    WifiMacHelper macSta;
+    macSta.SetType("ns3::StaWifiMac",
+        "Ssid", SsidValue(ssid),
+        "ActiveProbing", BooleanValue(true));
+    NetDeviceContainer droneDevs = wifi.Install(phy, macSta, drones);
+
+    // MAC attaquant — meme SSID pour pouvoir flooder l'Edge
     WifiMacHelper macAttacker;
-    macAttacker.SetType("ns3::AdhocWifiMac");
-    NetDeviceContainer attackerDev = wifiAttacker.Install(phyAttacker, macAttacker, attacker);
+    macAttacker.SetType("ns3::StaWifiMac",
+        "Ssid", SsidValue(ssid),
+        "ActiveProbing", BooleanValue(true));
+    NetDeviceContainer attackerDev = wifi.Install(phy, macAttacker, attacker);
+
+    // MAC Edge — point d'acces
+    WifiMacHelper macAp;
+    macAp.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
+    NetDeviceContainer edgeDev = wifi.Install(phy, macAp, edge);
 
     // Mobilite drones
     MobilityHelper mob;
@@ -124,7 +119,7 @@ int main(int argc, char *argv[])
     gcs.Get(0)->GetObject<ConstantPositionMobilityModel>()
         ->SetPosition(Vector(50.0, 0.0, 0.0));
     attacker.Get(0)->GetObject<ConstantPositionMobilityModel>()
-        ->SetPosition(Vector(48.0, 48.0, 0.0));
+        ->SetPosition(Vector(45.0, 45.0, 0.0));
 
     // Internet + AODV
     AodvHelper aodv;
@@ -138,11 +133,9 @@ int main(int argc, char *argv[])
     // Adresses IP
     Ipv4AddressHelper addr;
     addr.SetBase("10.1.1.0", "255.255.255.0");
-    Ipv4InterfaceContainer droneIfaces = addr.Assign(droneDevs);
-    Ipv4InterfaceContainer edgeIface   = addr.Assign(edgeDev);
-
-    addr.SetBase("10.1.2.0", "255.255.255.0");
+    Ipv4InterfaceContainer droneIfaces   = addr.Assign(droneDevs);
     Ipv4InterfaceContainer attackerIface = addr.Assign(attackerDev);
+    Ipv4InterfaceContainer edgeIface     = addr.Assign(edgeDev);
 
     // Lien filaire Edge -> GCS
     PointToPointHelper p2p;
@@ -151,7 +144,11 @@ int main(int argc, char *argv[])
     NetDeviceContainer e2gcs = p2p.Install(edge.Get(0), gcs.Get(0));
     addr.SetBase("10.1.3.0", "255.255.255.0");
     addr.Assign(e2gcs);
-
+    // Limiter la queue Wi-Fi de l'Edge a 100 paquets (filtrage DoS)
+    Config::Set(
+    "/NodeList/" + std::to_string(edge.Get(0)->GetId()) +
+    "/DeviceList/0/$ns3::WifiNetDevice/Mac/$ns3::ApWifiMac/BE_Txop/Queue/MaxSize",
+    QueueSizeValue(QueueSize("100p")));
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
     // Trafic video legitime 8 Mbps
@@ -167,7 +164,7 @@ int main(int argc, char *argv[])
         onoff.Install(drones.Get(i));
     }
 
-    // Attaque DoS UDP Flood vers l Edge
+    // Attaque DoS UDP Flood
     uint16_t dosPort = 8;
     OnOffHelper dosOnoff("ns3::UdpSocketFactory",
         InetSocketAddress(edgeIface.GetAddress(0), dosPort));
@@ -203,7 +200,6 @@ int main(int argc, char *argv[])
          << "/DeviceList/0/$ns3::WifiNetDevice/Phy/PhyTxEnd";
     Config::ConnectWithoutContext(ossA.str(), MakeCallback(&DosTxCallback));
 
-    // Log debut attaque
     Simulator::Schedule(Seconds(dosStart), [dosStart, dosRate]() {
         NS_LOG_UNCOND("[t=" << dosStart << "s] Attaque DoS demarree - flood " << dosRate);
     });
@@ -260,24 +256,16 @@ int main(int argc, char *argv[])
     double avgLoss       = flowCount > 0 ? legitLoss / flowCount : 0;
     double avgLatency    = flowCount > 0 ? legitLatency / flowCount : 0;
 
-    // Estimation paquets DoS filtres par saturation canal Wi-Fi
-    double dosActualRate = dosThroughput;
-    double dosRequestedRate = std::stod(dosRate) / 1e6;
-    uint32_t dosFiltered = (uint32_t)((dosRequestedRate - dosActualRate)
-                            * simTime * 1e6 / (1200 * 8));
-
     NS_LOG_UNCOND("\n========== SIMULATION ATTAQUE DoS UDP FLOOD ==========");
     NS_LOG_UNCOND("Drones legitimes         : " << nDrones);
     NS_LOG_UNCOND("Duree simulation         : " << simTime << "s");
     NS_LOG_UNCOND("Debut attaque DoS        : t=" << dosStart << "s");
     NS_LOG_UNCOND("Taux flood DoS demande   : " << dosRate);
-    NS_LOG_UNCOND("Filtrage Edge            : DropTail 100 paquets (modele)");
     NS_LOG_UNCOND("");
     NS_LOG_UNCOND("--- Attaquant DoS ---");
     NS_LOG_UNCOND("Paquets flood envoyes    : " << g_dosPackets);
     NS_LOG_UNCOND("Debit flood recu Edge    : " << dosThroughput << " Mbps");
     NS_LOG_UNCOND("Perte cote attaquant     : " << dosLoss << " %");
-    NS_LOG_UNCOND("Paquets filtres (estim.) : " << dosFiltered);
     NS_LOG_UNCOND("");
     NS_LOG_UNCOND("--- Drones legitimes ---");
     NS_LOG_UNCOND("Paquets envoyes          : " << g_legitPackets);
@@ -286,8 +274,8 @@ int main(int argc, char *argv[])
     NS_LOG_UNCOND("Latence moyenne          : " << avgLatency << " ms");
     NS_LOG_UNCOND("");
     NS_LOG_UNCOND("--- Analyse securite ---");
-    NS_LOG_UNCOND("Mecanisme filtrage       : DropTail queue 100 paquets");
-    NS_LOG_UNCOND("Trafic DoS absorbe       : " << dosThroughput << " Mbps sur " << dosRate << " demandes");
+    NS_LOG_UNCOND("Mecanisme filtrage       : Limiter la queue Wi-Fi de l'Edge a 100 paquets (filtrage DoS)");
+    NS_LOG_UNCOND("Debit DoS absorbe        : " << dosThroughput << " Mbps");
     NS_LOG_UNCOND("Resultat                 : ATTAQUE PARTIELLEMENT ATTENUEEE");
     NS_LOG_UNCOND("Impact residuel          : " << (avgLoss > 5.0 ? "Modere" : "Faible"));
     NS_LOG_UNCOND("======================================================");

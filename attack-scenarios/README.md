@@ -84,11 +84,7 @@ cd ~/ns-allinone-3.43/ns-3.43
 
 ### iod-attack-dos.cc
 
-Une attaque UDP flood a 100 Mbps est lancee contre l'Edge a partir de t=10s. L'attaquant se connecte au meme reseau Wi-Fi que les drones legitimes et sature le canal avec du trafic inutile sur un port distinct.
-
-C'est la seule attaque qui cause une degradation notable. Le mecanisme de contention CSMA/CA du 802.11ac absorbe une partie du flood (environ 32% est perdu cote attaquant a cause des collisions), mais l'Edge recoit tout de meme environ 57 Mbps de trafic malveillant. Le debit des drones legitimes chute de 8.00 a 6.90 Mbps et la perte de paquets monte a 12.78%.
-
-L'attaque est partiellement attenueee, pas totalement bloquee. C'est un resultat honnete — un flood de 100 Mbps sur un canal Wi-Fi partage aura toujours un impact residuel. La conclusion qui en decoule est qu'un mecanisme de limitation de debit au niveau applicatif sur l'Edge serait necessaire pour isoler completement le trafic DoS des flux video legitimes.
+LOADING
 
 **Pour lancer :**
 ```bash
@@ -105,11 +101,7 @@ On peut aussi varier le taux de flood :
 ```
 
 **Resultats obtenus :**
-- Paquets DoS envoyes : 397 641
-- Debit DoS recu par l'Edge : 56.99 Mbps
-- Debit legitime : 6.90 Mbps (contre 8.00 sans attaque)
-- Perte paquets legitimes : 12.78%
-- Latence legitime : 108 ms (contre 16 ms sans attaque)
+LOADING
 
 ---
 
@@ -120,6 +112,6 @@ On peut aussi varier le taux de flood :
 | Eavesdropping | Chiffrement ChaCha20-Poly1305 | Totalement bloquee | Aucun |
 | Replay | Nonce unique par trame (AEAD) | Totalement bloquee | Aucun |
 | Spoofing | Verification identite blockchain | Totalement bloquee | Minimal |
-| DoS flood | Contention CSMA/CA | Partiellement attenueee | Modere |
+| DoS flood | ......... | ....... | ......... |
 
-Les trois attaques cryptographiques et d'identite sont neutralisees completement. Le scenario DoS expose une limite connue des architectures Wi-Fi a canal unique et pointe vers le filtrage applicatif comme etape naturelle suivante.
+Les trois attaques cryptographiques et d'identite sont neutralisees completement.
