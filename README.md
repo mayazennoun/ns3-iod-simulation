@@ -100,7 +100,7 @@ Avec `L_cap = 5 ms` (capture), `L_enc = 0,5 ms`, `L_bc = 100 ms` (uniquement lor
 ---
 
 ## VI. Structure du dépôt
-
+```bash
 ns3-secure-iod-edge-blockchain/
 │
 ├── README.md
@@ -142,7 +142,7 @@ ns3-secure-iod-edge-blockchain/
 ├── iod-attack-replay.cc
 ├── iod-attack-spoofing.cc
 └── README.md
-
+```
 
 ---
 
@@ -158,6 +158,7 @@ cd ~/ns-allinone-3.43/ns-3.43
 # Génération des courbes
 cd results/
 python courbes_ns3.py
+```
 
 Des instructions détaillées sont fournies dans simulations/README.md
 ---
@@ -170,7 +171,7 @@ Python 3.x, matplotlib, pandas
 ```bash
 
 pip install matplotlib pandas
-
+```
 ---
 
 ## IX. Référence
