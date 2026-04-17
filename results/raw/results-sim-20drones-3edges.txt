@@ -1,0 +1,173 @@
+========== RESULTATS - 20 DRONES 3 EDGES ==========
+Architecture : 3 Edges (7+7+6 drones par Edge)
+Standard     : 802.11ac | 80 MHz | canaux physiques separes
+Duree        : 300s
+
+Flow 1 (10.3.1.1 -> 10.3.1.7 [Edge3])
+  Debit          : 6.11721 Mbps
+  L_tx (Wi-Fi)   : 1.15473 ms
+  L_total        : 108.155 ms
+  Jitter         : 0.742836 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 2 (10.1.1.1 -> 10.1.1.8 [Edge1])
+  Debit          : 6.11672 Mbps
+  L_tx (Wi-Fi)   : 3.16402 ms
+  L_total        : 110.164 ms
+  Jitter         : 1.31849 ms
+  Perte paquets  : 0.00107072 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 3 (10.2.1.1 -> 10.2.1.8 [Edge2])
+  Debit          : 6.11655 Mbps
+  L_tx (Wi-Fi)   : 2.59537 ms
+  L_total        : 109.595 ms
+  Jitter         : 1.11863 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 4 (10.3.1.2 -> 10.3.1.7 [Edge3])
+  Debit          : 6.11557 Mbps
+  L_tx (Wi-Fi)   : 1.54174 ms
+  L_total        : 108.542 ms
+  Jitter         : 0.978751 ms
+  Perte paquets  : 0.00535435 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 5 (10.2.1.2 -> 10.2.1.8 [Edge2])
+  Debit          : 6.11521 Mbps
+  L_tx (Wi-Fi)   : 2.99225 ms
+  L_total        : 109.992 ms
+  Jitter         : 1.27559 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 6 (10.1.1.2 -> 10.1.1.8 [Edge1])
+  Debit          : 6.11459 Mbps
+  L_tx (Wi-Fi)   : 2.58675 ms
+  L_total        : 109.587 ms
+  Jitter         : 1.16352 ms
+  Perte paquets  : 0.00107109 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 7 (10.2.1.3 -> 10.2.1.8 [Edge2])
+  Debit          : 6.11384 Mbps
+  L_tx (Wi-Fi)   : 2.90704 ms
+  L_total        : 109.907 ms
+  Jitter         : 1.27718 ms
+  Perte paquets  : 0.00214242 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 8 (10.3.1.3 -> 10.3.1.7 [Edge3])
+  Debit          : 6.11357 Mbps
+  L_tx (Wi-Fi)   : 1.71397 ms
+  L_total        : 108.714 ms
+  Jitter         : 0.975509 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 9 (10.1.1.3 -> 10.1.1.8 [Edge1])
+  Debit          : 6.11275 Mbps
+  L_tx (Wi-Fi)   : 2.67449 ms
+  L_total        : 109.674 ms
+  Jitter         : 1.23871 ms
+  Perte paquets  : 0.000535708 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 10 (10.1.1.4 -> 10.1.1.8 [Edge1])
+  Debit          : 6.11105 Mbps
+  L_tx (Wi-Fi)   : 2.94282 ms
+  L_total        : 109.943 ms
+  Jitter         : 1.25756 ms
+  Perte paquets  : 0.0160732 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 20 (10.3.1.4 -> 10.3.1.7 [Edge3])
+  Debit          : 6.11177 Mbps
+  L_tx (Wi-Fi)   : 1.56171 ms
+  L_total        : 108.562 ms
+  Jitter         : 0.975314 ms
+  Perte paquets  : 0.000535794 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 25 (10.2.1.4 -> 10.2.1.8 [Edge2])
+  Debit          : 6.11066 Mbps
+  L_tx (Wi-Fi)   : 2.60685 ms
+  L_total        : 109.607 ms
+  Jitter         : 1.14284 ms
+  Perte paquets  : 0.00535865 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 45 (10.2.1.5 -> 10.2.1.8 [Edge2])
+  Debit          : 6.10955 Mbps
+  L_tx (Wi-Fi)   : 2.89169 ms
+  L_total        : 109.892 ms
+  Jitter         : 1.29526 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 46 (10.3.1.5 -> 10.3.1.7 [Edge3])
+  Debit          : 6.1083 Mbps
+  L_tx (Wi-Fi)   : 1.88944 ms
+  L_total        : 108.889 ms
+  Jitter         : 1.03425 ms
+  Perte paquets  : 0.00804087 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 47 (10.1.1.5 -> 10.1.1.8 [Edge1])
+  Debit          : 6.1084 Mbps
+  L_tx (Wi-Fi)   : 2.93948 ms
+  L_total        : 109.939 ms
+  Jitter         : 1.2813 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 48 (10.1.1.6 -> 10.1.1.8 [Edge1])
+  Debit          : 6.10752 Mbps
+  L_tx (Wi-Fi)   : 2.49597 ms
+  L_total        : 109.496 ms
+  Jitter         : 1.12564 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 49 (10.3.1.6 -> 10.3.1.7 [Edge3])
+  Debit          : 6.10732 Mbps
+  L_tx (Wi-Fi)   : 1.80157 ms
+  L_total        : 108.802 ms
+  Jitter         : 1.00236 ms
+  Perte paquets  : 0.00268086 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 50 (10.2.1.6 -> 10.2.1.8 [Edge2])
+  Debit          : 6.1064 Mbps
+  L_tx (Wi-Fi)   : 2.34618 ms
+  L_total        : 109.346 ms
+  Jitter         : 1.09897 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 51 (10.2.1.7 -> 10.2.1.8 [Edge2])
+  Debit          : 6.10496 Mbps
+  L_tx (Wi-Fi)   : 2.95108 ms
+  L_total        : 109.951 ms
+  Jitter         : 1.25814 ms
+  Perte paquets  : 0 %
+  Blockchain     : 100 ms (modelise)
+
+Flow 52 (10.1.1.7 -> 10.1.1.8 [Edge1])
+  Debit          : 6.10395 Mbps
+  L_tx (Wi-Fi)   : 2.32863 ms
+  L_total        : 109.329 ms
+  Jitter         : 1.08818 ms
+  Perte paquets  : 0.00751021 %
+  Blockchain     : 100 ms (modelise)
+
+===========MOYENNES====================
+
+- Débit moyen           : 6.1106 Mbps
+- Latence Wi-Fi (L_tx)  : 2.404 ms
+- Latence totale        : 109.16 ms
+- Jitter moyen          : 1.11 ms
+- Perte de paquets      : 0.00252 %
+- Latence Blockchain    : 100 ms (constante)
