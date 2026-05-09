@@ -66,7 +66,7 @@ L'analyse BAN Logic confirme l'authentification mutuelle et la fraicheur de la c
 | N=10, 1 Edge | 80 MHz | 6.098 Mbps | 135 ms | 2.341 ms | 0.156% |
 | N=20, 2 Edges | 80 MHz | 6.095 Mbps | 134 ms | 2.334 ms | 0.180% |
 | N=20, 3 Edges | 80 MHz | ~6.09 Mbps | ~134 ms | ~2.3 ms | ~0.2% |
-| N=50, 3 Edges | 80 MHz | en cours | | | |
+| N=50, 3 Edges | 80 MHz | 3.08 Mbps | 315 ms |  4.05 ms | 49.8 % |
 
 ---
 
@@ -168,7 +168,7 @@ python courbes_ns3.py
 
 ## Reference
 
-> M. Nafa, M. Zennoun, "Blockchain-Enhanced Secure Communication Framework for Real-Time Internet of Drones (IoD) Video Transmission", Laboratoire LRS, Universite Badji Mokhtar Annaba, 2025.
+> M. Nafa, M. Zennoun, "Blockchain-Enhanced Secure Communication Framework for Real-Time Internet of Drones (IoD) Video Transmission", Laboratoire LRS, Universite Badji Mokhtar Annaba, 2026.
 
 ---
 
