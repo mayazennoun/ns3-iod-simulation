@@ -3,14 +3,21 @@ pragma solidity ^0.8.0;
 
 contract DroneRegistry {
 
+    // ========== ETATS POSSIBLES D'UN DRONE ==========
+
+    enum DroneStatus { UNREGISTERED, AUTHORIZED, REVOKED }
+
     // ========== REGISTRE D'IDENTITES ==========
 
-    mapping(string => bool) public authorizedDrones;
+    mapping(string => DroneStatus) public droneStatus;
     mapping(string => string) public dronePublicKeys;
     mapping(string => uint256) public droneRegistrationTime;
 
     function registerDrone(string memory droneId, string memory pubKey) public {
-        authorizedDrones[droneId] = true;
+        require(droneStatus[droneId] != DroneStatus.REVOKED,
+                "Drone revoque definitivement, re-enregistrement impossible");
+
+        droneStatus[droneId] = DroneStatus.AUTHORIZED;
         dronePublicKeys[droneId] = pubKey;
         droneRegistrationTime[droneId] = block.timestamp;
 
@@ -19,7 +26,7 @@ contract DroneRegistry {
     }
 
     function isAuthorized(string memory droneId) public view returns (bool) {
-        return authorizedDrones[droneId];
+        return droneStatus[droneId] == DroneStatus.AUTHORIZED;
     }
 
     function getPublicKey(string memory droneId) public view returns (string memory) {
@@ -27,9 +34,12 @@ contract DroneRegistry {
     }
 
     function revokeDrone(string memory droneId) public {
-        authorizedDrones[droneId] = false;
+        require(droneStatus[droneId] == DroneStatus.AUTHORIZED,
+                "Drone non autorise ou deja revoque");
 
-        _logInternally(droneId, "REVOCATION", "Drone revoque");
+        droneStatus[droneId] = DroneStatus.REVOKED;
+
+        _logInternally(droneId, "REVOCATION", "Drone revoque definitivement");
         emit DroneRevoked(droneId, block.timestamp);
     }
 
@@ -45,7 +55,6 @@ contract DroneRegistry {
     AuditEvent[] public auditLog;
     mapping(string => uint256[]) private droneEventIndices;
 
-    // fonction interne utilisee par les autres fonctions
     function _logInternally(
         string memory droneId,
         string memory eventType,
@@ -65,18 +74,18 @@ contract DroneRegistry {
         emit EventLogged(droneId, eventType, block.timestamp, details);
     }
 
-    // connexion d'un drone (appele apres M3)
     function logConnection(string memory droneId) public {
-        require(authorizedDrones[droneId], "Drone non autorise");
+        require(droneStatus[droneId] == DroneStatus.AUTHORIZED,
+                "Drone non autorise");
         _logInternally(droneId, "CONNECTION", "Session etablie apres handshake M1-M2-M3");
     }
 
-    // rafraichissement de la cle de session K_DE
     function logKeyRefresh(
         string memory droneId,
         string memory sessionTokenHash
     ) public {
-        require(authorizedDrones[droneId], "Drone non autorise");
+        require(droneStatus[droneId] == DroneStatus.AUTHORIZED,
+                "Drone non autorise");
 
         string memory details = string(abi.encodePacked(
             "KEY_REFRESH | token_hash:", sessionTokenHash
@@ -85,19 +94,19 @@ contract DroneRegistry {
         _logInternally(droneId, "KEY_REFRESH", details);
     }
 
-    // deconnexion d'un drone
     function logDisconnection(string memory droneId) public {
-        require(authorizedDrones[droneId], "Drone non autorise");
+        require(droneStatus[droneId] == DroneStatus.AUTHORIZED,
+                "Drone non autorise");
         _logInternally(droneId, "DISCONNECTION", "Session terminee");
     }
 
-    // evenement generique
     function logEvent(
         string memory droneId,
         string memory eventType,
         string memory details
     ) public {
-        require(authorizedDrones[droneId], "Drone non autorise");
+        require(droneStatus[droneId] == DroneStatus.AUTHORIZED,
+                "Drone non autorise");
         _logInternally(droneId, eventType, details);
     }
 
